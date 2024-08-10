@@ -8,4 +8,8 @@ type Config interface {
 	PostgresUser() string
 	PostgresPassword() string
 	PostgresName() string
+	EnvLevel() string
+	GrpcHost() string
+	GrpcPort() string
+	SslMode() string
 }

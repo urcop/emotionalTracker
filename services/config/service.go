@@ -17,12 +17,19 @@ type Db struct {
 	User     string `yaml:"user" env-default:"postgres"`
 	Password string `yaml:"password" env-default:"postgres"`
 	Name     string `yaml:"db_name" env-default:"postgres"`
+	SslMode  string `yaml:"sslmode"`
+}
+
+type GrpcServer struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
 }
 
 type Config struct {
 	Env        string     `yaml:"env" env-required:"true"`
 	HttpServer HttpServer `yaml:"http_server"`
 	Db         Db         `yaml:"db"`
+	GrpcServer GrpcServer `yaml:"grpc_server" env-required:"true"`
 }
 
 func Make() *Config {
@@ -71,4 +78,20 @@ func (s *Config) PostgresPassword() string {
 
 func (s *Config) PostgresName() string {
 	return s.Db.Name
+}
+
+func (s *Config) EnvLevel() string {
+	return s.Env
+}
+
+func (s *Config) GrpcHost() string {
+	return s.GrpcServer.Host
+}
+
+func (s *Config) GrpcPort() string {
+	return s.GrpcServer.Port
+}
+
+func (s *Config) SslMode() string {
+	return s.Db.SslMode
 }
