@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/FoodMoodOTG/examplearch/app"
+	"github.com/urcop/emotionalTracker/app"
 	"sync"
 )
 

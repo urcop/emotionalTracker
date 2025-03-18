@@ -3,7 +3,7 @@ package logger
 import (
 	"context"
 	"encoding/json"
-	"github.com/FoodMoodOTG/examplearch/domain/services"
+	"github.com/urcop/emotionalTracker/domain/services"
 	"github.com/fatih/color"
 	"io"
 	"log"

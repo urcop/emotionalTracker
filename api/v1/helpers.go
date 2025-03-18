@@ -2,7 +2,7 @@ package v1
 
 import (
 	"errors"
-	"github.com/FoodMoodOTG/examplearch/domain"
+	"github.com/urcop/emotionalTracker/domain"
 	"github.com/gofiber/fiber/v2"
 	"net/http"
 )

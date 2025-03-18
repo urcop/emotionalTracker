@@ -2,8 +2,8 @@ package postgres_driver
 
 import (
 	"fmt"
-	"github.com/FoodMoodOTG/examplearch/domain"
-	"github.com/FoodMoodOTG/examplearch/domain/repositories"
+	"github.com/urcop/emotionalTracker/domain"
+	"github.com/urcop/emotionalTracker/domain/repositories"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

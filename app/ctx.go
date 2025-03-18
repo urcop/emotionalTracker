@@ -1,10 +1,10 @@
 package app
 
 import (
-	"github.com/FoodMoodOTG/examplearch/domain"
-	"github.com/FoodMoodOTG/examplearch/domain/services"
-	"github.com/FoodMoodOTG/examplearch/services/config"
-	"github.com/FoodMoodOTG/examplearch/services/logger"
+	"github.com/urcop/emotionalTracker/domain"
+	"github.com/urcop/emotionalTracker/domain/services"
+	"github.com/urcop/emotionalTracker/services/config"
+	"github.com/urcop/emotionalTracker/services/logger"
 	"log"
 )
 

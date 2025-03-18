@@ -1,9 +1,9 @@
 package app
 
 import (
-	"github.com/FoodMoodOTG/examplearch/connection/postgres_driver"
-	"github.com/FoodMoodOTG/examplearch/domain"
-	"github.com/FoodMoodOTG/examplearch/services/config"
+	"github.com/urcop/emotionalTracker/connection/postgres_driver"
+	"github.com/urcop/emotionalTracker/domain"
+	"github.com/urcop/emotionalTracker/services/config"
 )
 
 func InitDB(cfg *config.Config) (domain.Connection, error) {

@@ -2,7 +2,7 @@ package app
 
 import (
 	"fmt"
-	"github.com/FoodMoodOTG/examplearch/services/config"
+	"github.com/urcop/emotionalTracker/services/config"
 	"google.golang.org/grpc"
 	"log/slog"
 	"net"

@@ -1,1 +1,1 @@
-# Шаблон миросервиса с DDD чистой архитектурой
+# emotional tracker backend

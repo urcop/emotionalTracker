@@ -1,6 +1,6 @@
 package domain
 
-import "github.com/FoodMoodOTG/examplearch/domain/repositories"
+import "github.com/urcop/emotionalTracker/domain/repositories"
 
 type Connection interface {
 	Example() repositories.Example

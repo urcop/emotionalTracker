@@ -1,6 +1,6 @@
 package domain
 
-import "github.com/FoodMoodOTG/examplearch/domain/services"
+import "github.com/urcop/emotionalTracker/domain/services"
 
 type Services interface {
 	Config() services.Config

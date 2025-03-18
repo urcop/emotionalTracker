@@ -1,9 +1,9 @@
 package app
 
 import (
-	v1 "github.com/FoodMoodOTG/examplearch/api/v1"
-	_ "github.com/FoodMoodOTG/examplearch/docs"
-	"github.com/FoodMoodOTG/examplearch/services/config"
+	v1 "github.com/urcop/emotionalTracker/api/v1"
+	_ "github.com/urcop/emotionalTracker/docs"
+	"github.com/urcop/emotionalTracker/services/config"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"

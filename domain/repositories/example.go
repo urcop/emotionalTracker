@@ -1,6 +1,6 @@
 package repositories
 
-import "github.com/FoodMoodOTG/examplearch/domain/models"
+import "github.com/urcop/emotionalTracker/domain/models"
 
 type Example interface {
 	Insert(example *models.Example) (string, error)

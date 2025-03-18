@@ -1,10 +1,10 @@
 package v1
 
 import (
-	"github.com/FoodMoodOTG/examplearch/domain"
-	"github.com/FoodMoodOTG/examplearch/domain/cases/create_example"
-	"github.com/FoodMoodOTG/examplearch/domain/cases/get_all_example"
-	"github.com/FoodMoodOTG/examplearch/domain/cases/get_example"
+	"github.com/urcop/emotionalTracker/domain"
+	"github.com/urcop/emotionalTracker/domain/cases/create_example"
+	"github.com/urcop/emotionalTracker/domain/cases/get_all_example"
+	"github.com/urcop/emotionalTracker/domain/cases/get_example"
 	"github.com/gofiber/fiber/v2"
 )
 

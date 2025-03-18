@@ -1,7 +1,7 @@
 package postgres_driver
 
 import (
-	"github.com/FoodMoodOTG/examplearch/domain/models"
+	"github.com/urcop/emotionalTracker/domain/models"
 	"gorm.io/gorm"
 )
 

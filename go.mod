@@ -1,4 +1,4 @@
-module github.com/FoodMoodOTG/examplearch
+module github.com/urcop/emotionalTracker
 
 go 1.21.5
 

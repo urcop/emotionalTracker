@@ -2,8 +2,8 @@ package get_example
 
 import (
 	"fmt"
-	"github.com/FoodMoodOTG/examplearch/domain"
-	"github.com/FoodMoodOTG/examplearch/domain/models"
+	"github.com/urcop/emotionalTracker/domain"
+	"github.com/urcop/emotionalTracker/domain/models"
 )
 
 type Request struct {

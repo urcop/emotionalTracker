@@ -1,6 +1,6 @@
 package handlers
 
-import "github.com/FoodMoodOTG/examplearch/domain"
+import "github.com/urcop/emotionalTracker/domain"
 
 type Handler struct {
 	//sso_v1.UnimplementedExampleServiceServer
