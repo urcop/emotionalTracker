@@ -15,7 +15,6 @@ FROM gogcc as builder
 WORKDIR /build
 
 COPY . .
-COPY .gitconfig /etc/gitconfig
 
 RUN go mod download && go mod verify
 
