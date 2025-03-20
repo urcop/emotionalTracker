@@ -3,8 +3,8 @@ http_server:
   host: 0.0.0.0
   port: 8000
 db:
-  host: 213.226.127.82
-  port: 5555
+  host: 161.35.178.209
+  port: 1871
   user: urcop
   password: urcopka11_
   db_name: urcop
