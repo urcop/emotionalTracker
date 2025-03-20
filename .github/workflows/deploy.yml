@@ -50,4 +50,4 @@ jobs:
             docker pull ${{ secrets.DOCKER_USERNAME }}/emotional_tracker_backend:latest
             docker stop emotional_tracker_backend || true
             docker rm emotional_tracker_backend || true
-            docker run -d --name emotional_tracker_backend -p 8001:8000 --restart unless-stopped ${{ secrets.DOCKER_USERNAME }}/emotional_tracker_backend:latest
+            docker run -d --name emotional_tracker_backend -p 8718:8000 --restart unless-stopped ${{ secrets.DOCKER_USERNAME }}/emotional_tracker_backend:latest
