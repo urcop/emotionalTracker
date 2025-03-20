@@ -1,11 +1,13 @@
 package app
 
 import (
+	"log"
+
 	"github.com/urcop/emotionalTracker/domain"
 	"github.com/urcop/emotionalTracker/domain/services"
 	"github.com/urcop/emotionalTracker/services/config"
+	"github.com/urcop/emotionalTracker/services/horoscope"
 	"github.com/urcop/emotionalTracker/services/logger"
-	"log"
 )
 
 type ctx struct {
@@ -14,8 +16,9 @@ type ctx struct {
 }
 
 type svs struct {
-	config services.Config
-	logger services.Logger
+	config    services.Config
+	logger    services.Logger
+	horoscope services.Horoscope
 }
 
 func (s *svs) Logger() services.Logger {
@@ -24,6 +27,10 @@ func (s *svs) Logger() services.Logger {
 
 func (s *svs) Config() services.Config {
 	return s.config
+}
+
+func (s *svs) Horoscope() services.Horoscope {
+	return s.horoscope
 }
 
 func (c *ctx) Services() domain.Services {
@@ -48,10 +55,16 @@ func InitCtx() *ctx {
 		log.Fatalf("cant initialize connection context due [%s]", err)
 	}
 
+	horoscopeService, err := horoscope.NewHoroscopeService()
+	if err != nil {
+		log.Fatalf("cant initialize horoscope service due [%s]", err)
+	}
+
 	return &ctx{
 		services: &svs{
-			config: cfg,
-			logger: logger.Init(cfg.EnvLevel()),
+			config:    cfg,
+			logger:    logger.Init(cfg.EnvLevel()),
+			horoscope: horoscopeService,
 		},
 		connection: connection,
 	}

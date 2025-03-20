@@ -1,56 +1,78 @@
 definitions:
-  create_example.Request:
+  create_user.Request:
     properties:
-      example:
-        $ref: '#/definitions/models.Example'
+      user:
+        $ref: '#/definitions/models.User'
     type: object
-  models.Example:
+  models.User:
     properties:
-      first_row:
-        type: integer
+      birthsday:
+        type: string
+      created_at:
+        type: string
+      first_name:
+        type: string
       id:
         type: string
-      second_row:
-        type: integer
+      second_name:
+        type: string
+      telegram_id:
+        type: string
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  update_user.Request:
+    properties:
+      user:
+        $ref: '#/definitions/models.User'
+    type: object
+  update_user_birthday.Request:
+    properties:
+      birthdate:
+        type: string
+      user_id:
+        type: string
     type: object
   v1.RawResponse:
     type: object
 info:
   contact: {}
 paths:
-  /api/v1/example/:
+  /api/v1/user/:
     get:
-      description: Retrieve a list of all examples
+      description: Retrieve a list of all users
       produces:
       - application/json
       responses:
         "200":
-          description: Returns a list of examples
+          description: Returns a list of users
           schema:
             $ref: '#/definitions/v1.RawResponse'
         "500":
           description: Internal server error
           schema:
             $ref: '#/definitions/v1.RawResponse'
-      summary: Get all examples
+      summary: Get all users
       tags:
-      - examples
+      - users
     post:
       consumes:
       - application/json
-      description: Create a new example with the provided details
+      description: Create a new user with the provided details
       parameters:
-      - description: Example request
+      - description: User request
         in: body
-        name: create_example.Request
+        name: create_user.Request
         required: true
         schema:
-          $ref: '#/definitions/create_example.Request'
+          $ref: '#/definitions/create_user.Request'
       produces:
       - application/json
       responses:
         "200":
-          description: Returns the ID of the created example
+          description: Returns the ID of the created user
           schema:
             $ref: '#/definitions/v1.RawResponse'
         "400":
@@ -61,14 +83,43 @@ paths:
           description: Internal server error
           schema:
             $ref: '#/definitions/v1.RawResponse'
-      summary: Create a new example
+      summary: Create a new user
       tags:
-      - examples
-  /api/v1/example/{id}:
-    get:
-      description: Retrieve a single example by its ID
+      - users
+    put:
+      consumes:
+      - application/json
+      description: Update an existing user with the provided details
       parameters:
-      - description: Example ID
+      - description: User update request
+        in: body
+        name: update_user.Request
+        required: true
+        schema:
+          $ref: '#/definitions/update_user.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns success status
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Update an existing user
+      tags:
+      - users
+  /api/v1/user/{id}/:
+    delete:
+      description: Delete a user by its ID
+      parameters:
+      - description: User ID
         in: path
         name: id
         required: true
@@ -77,14 +128,229 @@ paths:
       - application/json
       responses:
         "200":
-          description: Returns the requested example
+          description: Returns success status
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
           schema:
             $ref: '#/definitions/v1.RawResponse'
         "500":
           description: Internal server error
           schema:
             $ref: '#/definitions/v1.RawResponse'
-      summary: Get an example by ID
+      summary: Delete a user by ID
       tags:
-      - examples
+      - users
+    get:
+      description: Retrieve a single user by its ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns the requested user
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Get a user by ID
+      tags:
+      - users
+  /api/v1/user/{id}/birthday/:
+    put:
+      consumes:
+      - application/json
+      description: Update the birthdate for a specific user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Birthdate information
+        in: body
+        name: birthdate
+        required: true
+        schema:
+          $ref: '#/definitions/update_user_birthday.Request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns success status
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Update user's birthdate
+      tags:
+      - users
+  /api/v1/user/{telegram_id}/horoscope:
+    get:
+      consumes:
+      - application/json
+      description: Get translated daily horoscope for a user based on their birthdate
+      parameters:
+      - description: User ID or Telegram ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns translated horoscope information
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Get daily horoscope for a user
+      tags:
+      - zodiac
+  /api/v1/user/{telegram_id}/zodiac:
+    get:
+      consumes:
+      - application/json
+      description: Get zodiac sign information for a specific user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns zodiac sign information
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "404":
+          description: User not found
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Get user's zodiac sign
+      tags:
+      - zodiac
+  /api/v1/user/telegram/:
+    get:
+      description: Retrieve a single user by its Telegram ID
+      parameters:
+      - description: Telegram ID
+        in: query
+        name: telegram_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns the requested user
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Get a user by Telegram ID
+      tags:
+      - users
+  /api/v1/zodiac/:
+    get:
+      consumes:
+      - application/json
+      description: Get zodiac sign information by birthdate
+      parameters:
+      - description: Birthdate in format DD.MM.YYYY or YYYY-MM-DD
+        in: query
+        name: birthdate
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns zodiac sign information
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Get zodiac sign by birthdate
+      tags:
+      - zodiac
+  /api/v1/zodiac/horoscope:
+    get:
+      consumes:
+      - application/json
+      description: Get translated daily horoscope for a zodiac sign or by birthdate
+      parameters:
+      - description: Zodiac sign name (e.g., Aries, Taurus, etc.)
+        in: query
+        name: sign
+        type: string
+      - description: Birthdate in format DD.MM.YYYY or YYYY-MM-DD
+        in: query
+        name: birthdate
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns translated horoscope information
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/v1.RawResponse'
+      summary: Get daily horoscope for a zodiac sign or by birthdate
+      tags:
+      - zodiac
 swagger: "2.0"

@@ -1,10 +1,12 @@
 package v1
 
 import (
-	"errors"
-	"github.com/urcop/emotionalTracker/domain"
-	"github.com/gofiber/fiber/v2"
+	"fmt"
 	"net/http"
+
+	"github.com/gofiber/fiber/v2"
+
+	"github.com/urcop/emotionalTracker/domain"
 )
 
 type RawResponse struct {
@@ -34,19 +36,22 @@ func (r *RawResponse) Body() *ResponseBody {
 }
 
 type Response struct {
-	Status  int    `json:"status"`
-	Message string `json:"message,omitempty"`
+	Status  int    `json:"status" example:"200"`
+	Message string `json:"message,omitempty" example:"some message"`
 }
 
 type ResponseBody struct {
 	Response   `json:"response"`
-	Additional interface{} `json:"additional,omitempty"`
+	Additional interface{} `json:"-"`
 	Payload    interface{} `json:"payload,omitempty"`
 }
 
 func WrapHandler(handler func(c domain.Context, ctx *fiber.Ctx) *RawResponse) fiber.Handler {
 	return func(ctx *fiber.Ctx) error {
-		newContext := ctx.Locals("context").(domain.Context)
+		newContext, ok := ctx.Locals("context").(domain.Context)
+		if !ok {
+			return nil
+		}
 
 		response := handler(newContext, ctx)
 		body := response.Body()
@@ -54,22 +59,30 @@ func WrapHandler(handler func(c domain.Context, ctx *fiber.Ctx) *RawResponse) fi
 		status := body.Status
 
 		if err := response.Error(); err != nil {
-			var domainErr *domain.Error
-			if errors.As(err, &domainErr) {
-				body.Message = domainErr.Message(true)
 
-				if domainErr.HttpCode() > 0 {
-					status = domainErr.HttpCode()
-					body.Status = domainErr.HttpCode()
-				}
-
-				if domainErr.ExtraCode() > 0 {
-					body.Status = domainErr.ExtraCode()
-				}
-			}
-
+			body.Message = response.Error().Error()
 		}
 		return ctx.Status(status).JSON(body)
+	}
+}
+
+func WrapHandlerOAuth(handler func(c domain.Context, ctx *fiber.Ctx) error) fiber.Handler {
+	return func(ctx *fiber.Ctx) error {
+		domainCtx, ok := ctx.Locals("context").(domain.Context)
+		if !ok {
+			return nil
+		}
+
+		err := handler(domainCtx, ctx)
+
+		if err != nil {
+			fmt.Printf("Error: %v\n", err)
+			return ctx.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+
+		return nil
 	}
 }
 

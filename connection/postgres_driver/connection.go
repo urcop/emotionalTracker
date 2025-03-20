@@ -2,22 +2,25 @@ package postgres_driver
 
 import (
 	"fmt"
-	"github.com/urcop/emotionalTracker/domain"
-	"github.com/urcop/emotionalTracker/domain/repositories"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+
+	"github.com/urcop/emotionalTracker/domain"
+	"github.com/urcop/emotionalTracker/domain/models"
+	"github.com/urcop/emotionalTracker/domain/repositories"
 )
 
 type connection struct {
 	db *gorm.DB
 
-	exampleRepository repositories.Example
+	userRepository repositories.User
 }
 
 func makeConnection(db *gorm.DB) *connection {
 	return &connection{
-		db:                db,
-		exampleRepository: &exampleRepository{db},
+		db:             db,
+		userRepository: &userRepository{db},
 	}
 }
 
@@ -33,21 +36,25 @@ func Make(user, password, host, port, database, sslmode string) (domain.Connecti
 
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, fmt.Errorf("unable to open database due [%s]", err)
+		return nil, fmt.Errorf("unable to open database due [%w]", err)
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
-		return nil, fmt.Errorf("unable to get DB object due [%s]", err)
+		return nil, fmt.Errorf("unable to get DB object due [%w]", err)
 	}
 
 	if err := sqlDB.Ping(); err != nil {
-		return nil, fmt.Errorf("unable to ping DB due [%s]", err)
+		return nil, fmt.Errorf("unable to ping DB due [%w]", err)
+	}
+
+	if err := db.AutoMigrate(&models.User{}); err != nil {
+		return nil, fmt.Errorf("unable to migrate user table due [%w]", err)
 	}
 
 	return makeConnection(db), nil
 }
 
-func (c connection) Example() repositories.Example {
-	return c.exampleRepository
+func (c connection) User() repositories.User {
+	return c.userRepository
 }

@@ -1,18 +1,20 @@
 package app
 
 import (
-	v1 "github.com/urcop/emotionalTracker/api/v1"
-	_ "github.com/urcop/emotionalTracker/docs"
-	"github.com/urcop/emotionalTracker/services/config"
+	"log"
+	"runtime"
+	"strings"
+	"time"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/swagger"
-	"log"
-	"runtime"
-	"strings"
-	"time"
+
+	v1 "github.com/urcop/emotionalTracker/api/v1"
+	_ "github.com/urcop/emotionalTracker/docs"
+	"github.com/urcop/emotionalTracker/services/config"
 )
 
 type HttpServer struct {
@@ -26,7 +28,7 @@ type Server interface {
 func NewHttpServer() Server {
 	app := fiber.New(fiber.Config{
 		BodyLimit:         1024 * 1024 * 50,
-		AppName:           "FoodMoodExample",
+		AppName:           "EmotionalTracker",
 		StreamRequestBody: true,
 	})
 
@@ -73,14 +75,26 @@ func (s *HttpServer) Start() {
 	}
 	domainCtx.Services().Logger().Info("swagger handler initialized", "op", "server.Start()")
 
-	example := s.app.Group("/api/v1/example")
+	user := s.app.Group("/api/v1/user")
 	{
-		example.Post("/", v1.WrapHandler(v1.CreateExample))
-		example.Get("/:id/", v1.WrapHandler(v1.GetExample))
-		example.Get("/", v1.WrapHandler(v1.GetAllExamples))
+		user.Post("/", v1.WrapHandler(v1.CreateUser))
+		user.Get("/telegram/", v1.WrapHandler(v1.GetUserByTelegramId))
+		user.Get("/:id/zodiac/", v1.WrapHandler(v1.GetUserZodiacSign))
+		user.Put("/:id/birthday", v1.WrapHandler(v1.UpdateUserBirthday))
+		user.Get("/:telegram_id/horoscope/", v1.WrapHandler(v1.GetUserHoroscope))
+		user.Get("/:id/", v1.WrapHandler(v1.GetUser))
+		user.Get("/", v1.WrapHandler(v1.GetAllUsers))
+		user.Put("/", v1.WrapHandler(v1.UpdateUser))
+		user.Delete("/:id/", v1.WrapHandler(v1.DeleteUser))
 	}
 
-	domainCtx.Services().Logger().Info("auth handlers initialized", "op", "server.Start()")
+	zodiac := s.app.Group("/api/v1/zodiac")
+	{
+		zodiac.Get("/", v1.WrapHandler(v1.GetZodiacSign))
+		zodiac.Get("/horoscope", v1.WrapHandler(v1.GetHoroscope))
+	}
+
+	domainCtx.Services().Logger().Info("api handlers initialized", "op", "server.Start()")
 
 	err := s.app.Listen(":" + cfg.HttpPort())
 	if err != nil {

@@ -1,7 +1,7 @@
-FROM golang:1.21.5-alpine as gogcc
+FROM golang:1.23.0-alpine as gogcc
 
 ENV GOOS=linux
-ENV CGO_ENABLED=1
+ENV CGO_ENABLED=0
 ENV GO111MODULE=on
 
 RUN apk update && apk add --no-cache \
@@ -15,13 +15,16 @@ FROM gogcc as builder
 WORKDIR /build
 
 COPY . .
+COPY .gitconfig /etc/gitconfig
 
 RUN go mod download && go mod verify
 
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o build/app main.go
+RUN go build -a -installsuffix cgo -ldflags '-extldflags "-static"' -o main_build main.go
 
 # production stage
 FROM alpine:latest
+
+ARG CONFIG_PATH
 
 RUN apk update && apk add --no-cache \
         gcc \
@@ -30,7 +33,13 @@ RUN apk update && apk add --no-cache \
 WORKDIR /app/
 
 COPY --from=builder /build/docs .
-COPY --from=builder /build/app .
+COPY --from=builder /build/main_build .
 COPY --from=builder /build/config/ /config/
 
-CMD ["/app/app", "s"]
+
+ENV CONFIG_PATH=$CONFIG_PATH
+
+ENV SUPERUSER_PASSWORD=$SUPERUSER_PASSWORD
+ENV SUPERUSER_EMAIL=$SUPERUSER_EMAIL
+
+CMD ["/app/main_build"]
