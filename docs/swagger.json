@@ -4,19 +4,63 @@
         "contact": {}
     },
     "paths": {
-        "/api/v1/example/": {
+        "/api/v1/user/": {
             "get": {
-                "description": "Retrieve a list of all examples",
+                "description": "Retrieve a list of all users",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "examples"
+                    "users"
                 ],
-                "summary": "Get all examples",
+                "summary": "Get all users",
                 "responses": {
                     "200": {
-                        "description": "Returns a list of examples",
+                        "description": "Returns a list of users",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing user with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update an existing user",
+                "parameters": [
+                    {
+                        "description": "User update request",
+                        "name": "update_user.Request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/update_user.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns success status",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
                         "schema": {
                             "$ref": "#/definitions/v1.RawResponse"
                         }
@@ -30,7 +74,7 @@
                 }
             },
             "post": {
-                "description": "Create a new example with the provided details",
+                "description": "Create a new user with the provided details",
                 "consumes": [
                     "application/json"
                 ],
@@ -38,23 +82,23 @@
                     "application/json"
                 ],
                 "tags": [
-                    "examples"
+                    "users"
                 ],
-                "summary": "Create a new example",
+                "summary": "Create a new user",
                 "parameters": [
                     {
-                        "description": "Example request",
-                        "name": "create_example.Request",
+                        "description": "User request",
+                        "name": "create_user.Request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/create_example.Request"
+                            "$ref": "#/definitions/create_user.Request"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns the ID of the created example",
+                        "description": "Returns the ID of the created user",
                         "schema": {
                             "$ref": "#/definitions/v1.RawResponse"
                         }
@@ -74,20 +118,61 @@
                 }
             }
         },
-        "/api/v1/example/{id}": {
+        "/api/v1/user/telegram/": {
             "get": {
-                "description": "Retrieve a single example by its ID",
+                "description": "Retrieve a single user by its Telegram ID",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "examples"
+                    "users"
                 ],
-                "summary": "Get an example by ID",
+                "summary": "Get a user by Telegram ID",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Example ID",
+                        "description": "Telegram ID",
+                        "name": "telegram_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns the requested user",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{id}/": {
+            "get": {
+                "description": "Retrieve a single user by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Get a user by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -95,7 +180,292 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Returns the requested example",
+                        "description": "Returns the requested user",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a user by its ID",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete a user by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns success status",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{id}/birthday/": {
+            "put": {
+                "description": "Update the birthdate for a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user's birthdate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Birthdate information",
+                        "name": "birthdate",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/update_user_birthday.Request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns success status",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{telegram_id}/horoscope": {
+            "get": {
+                "description": "Get translated daily horoscope for a user based on their birthdate",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "zodiac"
+                ],
+                "summary": "Get daily horoscope for a user",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID or Telegram ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns translated horoscope information",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{telegram_id}/zodiac": {
+            "get": {
+                "description": "Get zodiac sign information for a specific user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "zodiac"
+                ],
+                "summary": "Get user's zodiac sign",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns zodiac sign information",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/zodiac/": {
+            "get": {
+                "description": "Get zodiac sign information by birthdate",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "zodiac"
+                ],
+                "summary": "Get zodiac sign by birthdate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Birthdate in format DD.MM.YYYY or YYYY-MM-DD",
+                        "name": "birthdate",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns zodiac sign information",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/zodiac/horoscope": {
+            "get": {
+                "description": "Get translated daily horoscope for a zodiac sign or by birthdate",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "zodiac"
+                ],
+                "summary": "Get daily horoscope for a zodiac sign or by birthdate",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Zodiac sign name (e.g., Aries, Taurus, etc.)",
+                        "name": "sign",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Birthdate in format DD.MM.YYYY or YYYY-MM-DD",
+                        "name": "birthdate",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns translated horoscope information",
+                        "schema": {
+                            "$ref": "#/definitions/v1.RawResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
                         "schema": {
                             "$ref": "#/definitions/v1.RawResponse"
                         }
@@ -111,25 +481,59 @@
         }
     },
     "definitions": {
-        "create_example.Request": {
+        "create_user.Request": {
             "type": "object",
             "properties": {
-                "example": {
-                    "$ref": "#/definitions/models.Example"
+                "user": {
+                    "$ref": "#/definitions/models.User"
                 }
             }
         },
-        "models.Example": {
+        "models.User": {
             "type": "object",
             "properties": {
-                "first_row": {
-                    "type": "integer"
+                "birthsday": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "first_name": {
+                    "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "second_row": {
-                    "type": "integer"
+                "second_name": {
+                    "type": "string"
+                },
+                "telegram_id": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "update_user.Request": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/models.User"
+                }
+            }
+        },
+        "update_user_birthday.Request": {
+            "type": "object",
+            "properties": {
+                "birthdate": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "string"
                 }
             }
         },
