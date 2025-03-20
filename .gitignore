@@ -1,5 +1,5 @@
 .idea
 config/dev.yaml
-config/prod.yaml
+# config/prod.yaml
 build/
 .env
